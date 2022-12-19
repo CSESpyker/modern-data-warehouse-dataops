@@ -6,7 +6,8 @@ param synStorageAccount string = '${project}${environment_id}dlstacc'
 param mainStorageAccount string = '${project}${environment_id}synstacc'
 param synStorageFileSys string = 'synapsedefaults'
 param synWorkspaceName string = '${project}${environment_id}synws'
-param SynapseSparkPoolName string = '${project}${environment_id}synsp'
+param synapseSparkPoolName string = '${project}${environment_id}synsp'
+param keyvaultName string = '${project}${environment_id}kv'
 
 module storage './modules/storage.bicep' = {
   name: 'storage_deploy_${environment_id}'
@@ -26,10 +27,19 @@ module synapse './modules/synapse.bicep' = {
     main_storage_account: mainStorageAccount
     syn_storage_file_sys: synStorageFileSys
     syn_worskpace_name: synWorkspaceName
-    synapse_spark_sql_pool_name: SynapseSparkPoolName
+    synapse_spark_sql_pool_name: synapseSparkPoolName
+    key_vault_name: keyvaultName
+  }
+}
+
+module keyvault './modules/keyvault.bicep' ={
+  name: 'keyvault_deploy_${environment_id}'
+  params: {
+    location: location
+    key_vault_name: keyvaultName
   }
 }
 
 output storage_account_name string = synStorageAccount
 output synapseworkspace_name string = synWorkspaceName
-output synapse_output_spark_pool_name string = SynapseSparkPoolName
+output synapse_output_spark_pool_name string = synapseSparkPoolName

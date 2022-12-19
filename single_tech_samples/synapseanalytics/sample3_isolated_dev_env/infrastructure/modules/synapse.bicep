@@ -4,9 +4,12 @@ param main_storage_account string
 param syn_storage_file_sys string
 param syn_worskpace_name string
 param synapse_spark_sql_pool_name string
+param key_vault_name string
 
 //https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 var storage_blob_data_contributor = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+var key_vault_reader = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '21090545-7ca7-4776-b22c-e363652d74d2')
+
 
 resource synStorage 'Microsoft.Storage/storageAccounts@2021-06-01' existing = {
   name: syn_storage_account
@@ -18,6 +21,10 @@ resource synFileSystem 'Microsoft.Storage/storageAccounts/blobServices/container
 
 resource mainStorage 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
   name: main_storage_account
+}
+
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
+  name: key_vault_name
 }
 
 resource synapseWorkspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
@@ -97,6 +104,16 @@ resource roleAssignmentSynStorage2 'Microsoft.Authorization/roleAssignments@2022
     principalType: 'ServicePrincipal'
   }
   scope: mainStorage
+}
+
+resource roleAssignmentKeyvault 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, resourceId('Microsoft.KeyVault/vaults', keyVault.name))
+  properties: {
+    principalId: synapseWorkspace.identity.principalId
+    roleDefinitionId: key_vault_reader
+    principalType: 'ServicePrincipal'
+  }
+  scope: keyVault
 }
 
 output synapseWorkspaceName string = synapseWorkspace.name
