@@ -43,6 +43,13 @@ resource synapseWorkspace 'Microsoft.Synapse/workspaces@2021-06-01' = {
     }
     publicNetworkAccess: 'Enabled'
     managedResourceGroupName: '${syn_worskpace_name}-mrg'
+    workspaceRepositoryConfiguration: {
+      accountName: 'CSESpyker'
+      collaborationBranch: 'main'
+      repositoryName: 'modern-data-warehouse-dataops'
+      rootFolder: '/single_tech_samples/synapseanalytics/sample3_isolated_dev_env/artifacts'
+      type: 'WorkspaceGitHubConfiguration'
+    }
   }
 }
 

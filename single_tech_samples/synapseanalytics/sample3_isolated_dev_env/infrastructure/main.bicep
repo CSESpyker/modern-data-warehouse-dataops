@@ -6,7 +6,7 @@ param synStorageAccount string = '${project}${environment_id}dlstacc'
 param mainStorageAccount string = '${project}${environment_id}synstacc'
 param synStorageFileSys string = 'synapsedefaults'
 param synWorkspaceName string = '${project}${environment_id}synws'
-param synapseSparkPoolName string = '${project}${environment_id}synsp'
+param synapseSparkPoolName string = 'synsparkpool' //keep fixed because of the reference in synapse notebooks to this sparkpool name
 param keyvaultName string = '${project}${environment_id}kv'
 
 module storage './modules/storage.bicep' = {

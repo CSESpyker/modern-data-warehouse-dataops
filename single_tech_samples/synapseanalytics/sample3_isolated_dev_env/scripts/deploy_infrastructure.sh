@@ -2,18 +2,18 @@
 
 # Access granted under MIT Open Source License: https://en.wikipedia.org/wiki/MIT_License
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-# documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-# the rights to use, copy, modify, merge, publish, distribute, sublicense, # and/or sell copies of the Software, 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+# documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense, # and/or sell copies of the Software,
 # and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions 
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions
 # of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
-# TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+# TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+# CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
 #######################################################
@@ -58,11 +58,16 @@ owner_object_id=$(az ad signed-in-user show --output json | jq -r '.id')
 
 # Validate arm template
 echo "Validating deployment"
-arm_output=$(az deployment group validate \
+arm_valid_output=$(az deployment group validate \
     --resource-group "$resource_group_name" \
     --template-file "./infrastructure/main.bicep" \
     --parameters project="${PROJECT}" environment_id="${ENVIRONMENT_ID}" \
     --output json)
+
+if [[ -z $arm_valid_output ]]; then
+    echo >&2 "ARM validation failed."
+    exit 1
+fi
 
 # Deploy arm template
 echo "Deploying resources into $resource_group_name"
@@ -95,7 +100,7 @@ echo "$synapse_sparkpool_name"
 
 echo "$owner_object_id"
 
-echo "ADDING SLEEP 20 REMOVE IF REDUNDANT Waiting for Synapse Analytics to be ready..."
+echo "Waiting for resources to add role assignment..."
 sleep 20
 
 # Grant Synapse Administrator to the deployment owner
