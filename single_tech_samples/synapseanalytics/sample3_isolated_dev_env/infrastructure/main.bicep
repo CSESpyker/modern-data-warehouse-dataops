@@ -2,8 +2,8 @@ param project string
 param location string = resourceGroup().location
 param environment_id string
 
-param synStorageAccount string = '${project}${environment_id}dlstacc'
-param mainStorageAccount string = '${project}${environment_id}synstacc'
+param synStorageAccount string = '${project}${environment_id}synstacc'
+param mainStorageAccount string = '${project}${environment_id}dlstacc'
 param synStorageFileSys string = 'synapsedefaults'
 param synWorkspaceName string = '${project}${environment_id}synws'
 param synapseSparkPoolName string = 'synsparkpool' //keep fixed because of the reference in synapse notebooks to this sparkpool name
