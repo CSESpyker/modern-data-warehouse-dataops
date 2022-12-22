@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy NYCTaxi from http dataset to DL",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -15,8 +15,24 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						}
+					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "Ds_NYCTaxi_HTTP",
+						"type": "DatasetReference",
+						"parameters": {
+							"sourcefile": "2018-10"
+						}
+					}
+				]
 			}
 		],
 		"annotations": []
