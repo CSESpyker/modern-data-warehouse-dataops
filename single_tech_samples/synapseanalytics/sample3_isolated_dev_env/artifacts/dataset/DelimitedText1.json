@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference",
 			"parameters": {
 				"environment_id": {
-					"value": "@substring(pipeline().DataFactory,0,7)",
+					"value": "@substring(pipeline().DataFactory,0,12)",
 					"type": "Expression"
 				}
 			}
