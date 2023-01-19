@@ -9,7 +9,7 @@
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://@{linkedService().environment_id}dlstacc.dfs.core.windows.net/"
+			"url": "https://@{linkedService().environment_id}synstacc.dfs.core.windows.net/"
 		}
 	}
 }
